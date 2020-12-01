@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.TreeMap;
 
 public class Server {
 
@@ -37,6 +36,7 @@ public class Server {
     public synchronized void start() {
         InetSocketAddress address = new InetSocketAddress(hostname, port);
         ServerSocket serverSocket = null;
+        // Create socket to wait for connection.
         try {
             serverSocket = new ServerSocket();
             serverSocket.bind(address);
@@ -44,10 +44,11 @@ public class Server {
             e.printStackTrace();
         }
         assert serverSocket != null;
+
         while (!serverSocket.isClosed()) {
             try {
                 Socket connection = serverSocket.accept();
-                System.out.println(connection.getInetAddress());
+                //System.out.println(connection.getInetAddress());
                 ClientHandler handler = new ClientHandler(connection);
                 handler.setDaemon(true);
                 handler.start();
@@ -56,5 +57,4 @@ public class Server {
             }
         }
     }
-
 }
